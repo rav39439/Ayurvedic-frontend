@@ -23,7 +23,7 @@ const Register = () => {
   const onSubmit = (data) => {
     console.log("Form Data:", data);
      dispatch(signup({username:data.username,email:data.email,password:data.password},navigate))
-     setStatus('successfully Registered')
+     setStatus('successfully Registered,Please login now')
   };
 
   return (
