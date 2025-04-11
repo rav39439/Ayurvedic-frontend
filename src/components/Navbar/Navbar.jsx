@@ -6,28 +6,21 @@ import {
   IconButton,
   Box,
   useTheme,
-  Menu
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
-import { addTask, getTask, setTaskNull, setUser } from "../../redux/Actions";
+import { addBook, getBook, setUser } from "../../redux/Actions";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setTask } from "../../redux/Actions";
-// import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-// import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-// import "react-datepicker/dist/react-datepicker.css";
-import { format } from "date-fns"; // Import format from date-fns
+import { MenuItem } from '@mui/material';
 
+import { format } from "date-fns";
 import {
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   TextField,
-  MenuItem,
-  Select,
-  FormControl,
   useMediaQuery,
 } from "@mui/material";
 
@@ -40,7 +33,9 @@ const Navbar = (props) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
-const test=false
+  const test = false;
+  const genres = ['Fiction', 'Non-Fiction', 'Romance', 'Fantasy', 'Science Fiction', 'Mystery', 'Thriller', 'Biography'];
+
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     taskTitle: "",
@@ -75,31 +70,31 @@ const test=false
 
   const handletitleChange = (e) => {
     // dispatch(setUser(null))
-    // dispatch(getTask(userdata))
+    // dispatch(getBook(userdata))
 
     if (e.target.value !== "") {
       let taskupdated = props.duptasks.filter((d) =>
         d.taskTitle.includes(e.target.value)
       );
       // dispatch(setTaskNull())
-      dispatch(setTask(taskupdated));
+      // dispatch(setTask(taskupdated));
     } else {
       // dispatch(setTaskNull())
-      dispatch(setTask(props.duptasks));
+      // dispatch(setTask(props.duptasks));
     }
   };
 
   const handleCategoriesChange = (e) => {
     // let userdata=JSON.parse(localStorage.getItem('Profile'))
-    // dispatch(getTask(userdata))
+    // dispatch(getBook(userdata))
     if (e.target.value !== "") {
       let taskupdated = props.duptasks.filter((d) =>
         d.taskstatus.includes(e.target.value)
       );
-     
-      dispatch(setTask(taskupdated));
+
+      // dispatch(setTask(taskupdated));
     } else {
-      dispatch(setTask(props.duptasks));
+      // dispatch(setTask(props.duptasks));
     }
   };
 
@@ -116,26 +111,20 @@ const test=false
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(formData);
 
-    let maxid = getId() + 1;
-    formData["username"] =
-      props?.userInfo !== null ? props.userInfo.user?.result?.username : "";
-    formData["userid"] =
-      props?.userInfo !== null ? props?.userInfo?.user.result._id : "";
+    // formData["username"] =
+    //   props?.userInfo !== null ? props.userInfo.user?.result?.username : "";
+    // formData["userid"] =
+    //   props?.userInfo !== null ? props?.userInfo?.user.result._id : "";
 
     dispatch(
-      addTask(
-        formData.username,
-        formData.priority,
-        formData.duedate,
-        formData.userid,
-        formData.taskTitle,
-        formData.taskdetails,
-        formData.taskstartedAt,
-        formData.taskendedAt==""?null:formData.taskendedAt,
-        formData.taskprogress,
-        formData.taskstatus,
-        formData.taskCategories
+      addBook(
+        formData.author,
+        formData.title,
+        formData.year,
+        formData.genre,
+        formData.description
       )
     );
     handleClose();
@@ -172,7 +161,7 @@ const test=false
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          Task Manager
+          Book Store
         </Typography>
         {test ? (
           <>
@@ -219,152 +208,91 @@ const test=false
               <MenuItem onClick={props.handleLogout}>Logout</MenuItem>
             </Menu> */}
           </>
-        ):(
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          {userdata !== null ? (
-            <TextField
-              style={{ font: "black", backgroundColor: "white" }}
-              label="Task Title"
-              name="taskTitle"
-              // variant="outlined"
-              size="small"
-              sx={{ minWidth: 200 }}
-              onChange={handletitleChange}
-            />
-          ) : (
-            ""
-          )}
-          {userdata !== null ? (
-            <FormControl variant="outlined" size="small" sx={{ minWidth: 150 }}>
-              <Select
-                value=""
-                onChange={handleCategoriesChange}
-                displayEmpty
-                style={{ font: "black", backgroundColor: "white" }}
-              >
-                <MenuItem value="" disabled>
-                  Select Status
-                </MenuItem>
-                {allstatus.map((cat) => (
-                  <MenuItem key={cat} value={cat}>
-                    {cat}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          ) : (
-            ""
-          )}
-          {userdata !== null ? (
-            <Button size="small" onClick={handleOpen} variant="contained">
-              Create Task
-            </Button>
-          ) : (
-            ""
-          )}
-          {userdata !== null ? (
-          <Button size="small" onClick={handleLogout} variant="contained">
-            Logout
-          </Button>
-           ) : (
-            ""
-          )}
-        </Box>
+        ) : (
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            {userdata !== null ? (
+              <Button size="small" onClick={handleOpen} variant="contained">
+                Add book
+              </Button>
+            ) : (
+              ""
+            )}
+            {userdata !== null ? (
+              <Button size="small" onClick={handleLogout} variant="contained">
+                Logout
+              </Button>
+            ) : (
+              ""
+            )}
+          </Box>
         )}
 
         <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Create Task</DialogTitle>
+          <DialogTitle>Add Book</DialogTitle>
           <DialogContent>
             <form onSubmit={handleSubmit}>
-              <label>taskTitle</label>
+              <label>Title</label>
 
               <TextField
-                label="Task Title"
-                name="taskTitle"
+                label="title"
+                name="title"
                 fullWidth
                 margin="normal"
-                value={formData.taskTitle}
+                value={formData.title}
                 onChange={handleChange}
                 required
               />
 
-              <label>taskdetails</label>
+              <label>Author</label>
 
               <TextField
-                name="taskdetails"
+                name="author"
                 fullWidth
                 margin="normal"
-                value={formData.taskdetails}
+                value={formData.author}
                 onChange={handleChange}
                 required
               />
-              {/* <label>Duration</label>
+              <label>Genre</label>
 
-<TextField
-              name="taskduration"
-              fullWidth
-              margin="normal"
-              value={formData.taskduration}
-              onChange={handleChange}
-              required
-            /> */}
-
-              <label>duedate</label>
               <TextField
-                // value={formData.duedate}
-
-                type="datetime-local"
-                onChange={handleDateChange}
+                select
+                name="genre"
+                label="Genre"
                 fullWidth
+                margin="normal"
+                value={formData.genre}
+                onChange={handleChange}
+                required
+              >
+                {genres.map((genre) => (
+                  <MenuItem key={genre} value={genre}>
+                    {genre}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <label>Publish Year</label>
+
+              <TextField
+                name="year"
+                fullWidth
+                margin="normal"
+                value={formData.year}
+                onChange={handleChange}
+                required
               />
 
-              <FormControl fullWidth margin="normal">
-                <label>status</label>
-                <Select
-                  name="taskstatus"
-                  value={formData.taskstatus}
-                  // onChange={handleChange}
-                  required
-                  disabled
-                >
-                  {allstatus.map((cat) => (
-                    <MenuItem key={cat} value={cat}>
-                      {cat}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <FormControl fullWidth margin="normal">
-                <label>Category</label>
-                <Select
-                  name="taskCategories"
-                  value={formData.taskCategories}
-                  onChange={handleChange}
-                  required
-                >
-                  {categories.map((cat) => (
-                    <MenuItem key={cat} value={cat}>
-                      {cat}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <label>Description</label>
 
-              <FormControl fullWidth margin="normal">
-                <label>Priorities</label>
-                <Select
-                  name="priority"
-                  value={formData.priority}
-                  onChange={handleChange}
-                  required
-                >
-                  {priorities.map((cat) => (
-                    <MenuItem key={cat} value={cat}>
-                      {cat}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <TextField
+                name="description"
+                fullWidth
+                margin="normal"
+                value={formData.description}
+                onChange={handleChange}
+                required
+              />
+
               <DialogActions>
                 <Button onClick={handleClose} color="secondary">
                   Cancel

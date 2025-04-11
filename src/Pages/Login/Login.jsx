@@ -5,6 +5,7 @@ import { login } from "../../redux/Actions";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import axios from 'axios'
 
 const Login = (props) => {
   const dispatch = useDispatch();
@@ -19,19 +20,20 @@ const Login = (props) => {
   } = useForm({ mode: "onChange" })
 
   const navigate=useNavigate()
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     setLoading(true)
-      dispatch(login({email:data.email,password:data.password},navigate))
+    // const loginData=await getLoginData(data)
+       dispatch(login({username:data.username,password:data.password},navigate))
       setTimeout(()=>{
         setLoading(false)
-       
-      //  if( props.currentMessage!==null){
           seterrormessage(typeof(props.currentMessage)!=='undefined'&& props.currentMessage!==null?props.currentMessage.data.message:'Credentials are not valid')
-      //  }
+      
       },60000)
     
     
   };
+
+
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
@@ -45,18 +47,15 @@ const Login = (props) => {
 </p>
 <form onSubmit={handleSubmit(onSubmit)}>
       <TextField
-        label="Email"
+        label="Username"
         fullWidth
         margin="normal"
-        {...register("email", {
-          required: "Email is required",
-          pattern: {
-            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-            message: "Invalid email address",
-          },
+        {...register("username", {
+          required: "username is required",
+          
         })}
-        error={!!errors.email}
-        helperText={errors.email?.message}
+        error={!!errors.username}
+        helperText={errors.username?.message}
       />
 
       <TextField

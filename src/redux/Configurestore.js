@@ -1,13 +1,13 @@
 import {configureStore, combineReducers} from "@reduxjs/toolkit";
-import { TaskReducer ,UsersReducer,messageReducer,dupReducer} from "./Reducers";
+import {  UsersReducer,messageReducer, BookReducer,commentsReducer} from "./Reducers";
 //const ConfigureStore=()=>{
 
 
 const reducer = combineReducers({
-    TaskReducer,
+  BookReducer,
     UsersReducer,
     messageReducer,
-    dupReducer
+    commentsReducer
 
    
   })

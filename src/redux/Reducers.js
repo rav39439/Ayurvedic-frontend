@@ -1,18 +1,20 @@
 import {
-  ADD_TASK_SUCCESS,
-  DELETE_TASK_SUCCESS,
-  UPDATE_TASK_SUCCESS,
+  ADD_BOOK_SUCCESS,
+  DELETE_BOOK_SUCCESS,
+  UPDATE_BOOK_SUCCESS,
   SET_USER_SUCCESS,
   GET_USER_SUCCESS,
-  GET_TASK_SUCCESS,
+  GET_BOOK_SUCCESS,
   GET_MESSAGE_SUCCESS,
   SET_MESSAGE_SUCCESS,
-  SET_TASK_NULL,
-  SET_TASK_SUCCESS,
-  DUP_TASK_SUCCESS,
-  SET_DUPTASK_NULL,
-  ADD_DUPTASK_SUCCESS,
-  DELETE_DUPTASK_SUCCESS
+  ADD_COMMENT_SUCCESS,
+  GET_COMMENT_SUCCESS,
+  // SET_TASK_NULL,
+  // SET_TASK_SUCCESS,
+  // DUP_TASK_SUCCESS,
+  // SET_DUPTASK_NULL,
+  // ADD_DUPTASK_SUCCESS,
+  // DELETE_DUPTASK_SUCCESS
 
 } from "./Actions";
 
@@ -22,25 +24,20 @@ const initialState = {
   ],
 };
 
-const TaskReducer = (state = initialState, action) => {
+const BookReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_TASK_SUCCESS:
+    case ADD_BOOK_SUCCESS:
       return {
         ...state,
         tasks: [...state.tasks, action.payload], // ✅ Append new task to existing tasks
       };
 
-    case GET_TASK_SUCCESS:
+    case GET_BOOK_SUCCESS:
+      console.log(action.payload)
       return{...state,tasks:[...action.payload]}
 
 
-      case SET_TASK_NULL:
-      return{...state,tasks:[]}
-
-      case SET_TASK_SUCCESS:
-        return{...state,tasks:action.payload}
-
-    case UPDATE_TASK_SUCCESS:
+    case UPDATE_BOOK_SUCCESS:
       return {
         ...state,
         tasks: state.tasks.map(
@@ -48,7 +45,7 @@ const TaskReducer = (state = initialState, action) => {
         ),
       };
 
-    case DELETE_TASK_SUCCESS:
+    case DELETE_BOOK_SUCCESS:
       return {
         ...state,
         tasks: state.tasks.filter(
@@ -61,37 +58,30 @@ const TaskReducer = (state = initialState, action) => {
   }
 };
 
-const duptasks = {
-  duptasks: [
+const comments= {
+  comments: [
 
   ],
 };
 
-const dupReducer = (state = duptasks, action) => {
+const commentsReducer = (state = comments, action) => {
   switch (action.type) {
+    // case ADD_COMMENT_SUCCESS:
+    //   return {
+    //     ...state,
+    //     comments: [...state.comments, action.payload], // ✅ Append new task to existing tasks
+    //   };
 
-  case DUP_TASK_SUCCESS:
-    return{...state,duptasks:[...action.payload]}
-
-    case SET_DUPTASK_NULL:
-      return{...state,duptasks:[]}
-    case ADD_DUPTASK_SUCCESS:
-        return {
-          ...state,
-          duptasks: [...state.duptasks, action.payload], // ✅ Append new task to existing tasks
-        };
-        case DELETE_DUPTASK_SUCCESS:
-          return {
-            ...state,
-            tasks: state.tasks.filter(
-              (task) => task._id !== action.payload // ✅ Update existing task
-            ),
-          };
-    
-  default:
-    return state; // Ensure default state is returned
+    case GET_COMMENT_SUCCESS:
+      console.log("sdafasfa")
+      console.log(action.payload)
+      return{...state,comments:[...action.payload.reviews]}
+    default:
+      return state;
   }
-}
+};
+
+
 
 // New Users Reducer
 const initialStateuser = null; // State starts as null
@@ -138,4 +128,4 @@ const messageReducer = (state = initialMessage, action) => {
   }
 };
 
-export { TaskReducer, UsersReducer ,messageReducer,dupReducer};
+export { BookReducer, UsersReducer ,messageReducer,commentsReducer};

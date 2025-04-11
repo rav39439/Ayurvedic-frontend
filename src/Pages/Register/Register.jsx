@@ -25,28 +25,6 @@ const Register = () => {
      dispatch(signup({username:data.username,email:data.email,password:data.password},navigate))
      setStatus('successfully Registered')
   };
-  // const [emailError, setEmailError] = useState("");
-
-  // const handleChange = (e) => {
-  //   setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  //   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //   if (!emailPattern.test(formData.email) || formData.email=="") {
-  //     setEmailError("Invalid email format");
-  //   } else {
-  //     setEmailError("");
-  //   }
-  // };
-  
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   dispatch(signup({username:formData.username,email:formData.email,password:formData.password},navigate))
-  //   alert("successfully Registered. Please login")
-  //   // Implement user registration logic here
-  // };
-
-
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">

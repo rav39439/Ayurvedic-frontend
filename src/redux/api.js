@@ -1,24 +1,32 @@
 import axios from "axios";
 const API = axios.create({
-    baseURL: "https://taskmangerapiuser.onrender.com", // Ensure this is correct
-    headers: { "Content-Type": "application/json" } // Ensures JSON request
+    baseURL: "http://localhost:8000", 
+    headers: { "Content-Type": "application/json" } 
 });
-// const API=axios.create({baseURL:'https://stackoverflowcloneapi.onrender.com'})
-export const logIn=(authData)=>API.post('/api/users/login',authData);
-API.interceptors.request.use((req)=>{
-    if(localStorage.getItem('Profile')){
-        req.headers.authorization=`Bearer ${JSON.parse(localStorage.getItem('Profile')).token}`
+export const logIn=(authData)=>API.post('http://localhost:8000/api/token',authData);
+// API.interceptors.request.use((req)=>{
+//     if(localStorage.getItem('Profile')){
+//         req.headers.authorization=`Bearer ${JSON.parse(localStorage.getItem('Profile')).access}`
+//     }
+//     return req;
+// })
+
+API.interceptors.request.use((req) => {
+    if (localStorage.getItem('Profile')) {
+        req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('Profile')).access}`;
     }
+    console.log(req)
     return req;
-})
+});
 
 
 
-// export const fetchAllUsers=()=>API.get('/api/users/getAllUsers')
+export const SignUp=(authData)=>API.post('/register',authData);
+export const addnewbook=(data)=>API.post('/AddBook',data)
+export const getallbooks=(id)=>API.get(`/getBook`)
+export const getComment=(id)=>API.get(`/getReview/${id}`)
+export const addComment=(comment)=>API.post(`/AddReview/${comment.bookid}`,comment)
+export const getbookbyId=(id)=>API.get(`/getBookbyId/${id}`)
 
-
-export const SignUp=(authData)=>API.post('/api/users/signup',authData);
-export const addnewtask=(taskData)=>API.post('/api/tasks/add',taskData)
-export const getalltasksforuser=(id)=>API.get(`/api/tasks/get/${id}`)
-export const deletetask=(id)=>API.delete(`/api/tasks/delete/${id}`)
-export const updatetask=(data,id)=>API.put(`/api/tasks/update/${id}`,data)
+export const deletebook=(id)=>API.delete(`/api/tasks/delete/${id}`)
+export const updatebook=(data,id)=>API.put(`/getReview/${id}`)
