@@ -126,9 +126,9 @@ export const signup = (authData, navigate) => async (dispatch) => {
     const { data } = await api.SignUp(authData);
 
     // dispatch({ type: "SET_TASK_NULL",payload:[] });
-    dispatch({ type: "AUTH", data });
-    dispatch(setUser(JSON.parse(localStorage.getItem("Profile"))));
-     navigate("/");
+    // dispatch({ type: "AUTH", data });
+    // dispatch(setUser(JSON.parse(localStorage.getItem("Profile"))));
+    //  navigate("/");
   } catch (err) {
     console.log(err);
   }
