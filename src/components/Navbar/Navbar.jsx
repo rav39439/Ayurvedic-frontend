@@ -3,60 +3,44 @@ import {
   Toolbar,
   Typography,
   Button,
-  IconButton,
   Box,
   useTheme,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import { useState } from "react";
-import { addBook, getBook, setUser } from "../../redux/Actions";
+// import MenuIcon from "@mui/icons-material/Menu";
+// import { useState } from "react";
+import { setUser } from "../../redux/Actions";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { MenuItem } from '@mui/material';
 
-import { format } from "date-fns";
+import { useMediaQuery } from "@mui/material";
 import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-  useMediaQuery,
-} from "@mui/material";
+  getPastAppointmentsByPhone,
+  getUpcomingAppointmentsByPhone,
+} from "../../redux/Actions";
 
 const Navbar = (props) => {
   const dispatch = useDispatch();
-  const allstatus = ["Completed", "In Progress", "Started"]; // Categories for the dropdown
-  const categories = ["Work", "Personal", "Learning", "Other"]; // Categories for the dropdown
-  const priorities = ["Medium", "High", "Low"]; // Categories for the dropdown
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
   const test = false;
-  const genres = ['Fiction', 'Non-Fiction', 'Romance', 'Fantasy', 'Science Fiction', 'Mystery', 'Thriller', 'Biography'];
-
-  const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    taskTitle: "",
-    priority: "Medium",
-    duedate: "",
-    taskdetails: "",
-    taskstartedAt: new Date().toLocaleString(),
-    taskendedAt: "",
-    taskprogress: 0,
-    taskstatus: "Started",
-    taskCategories: "",
-    username: "",
-    userid: "",
-  });
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   const userdata = JSON.parse(localStorage.getItem("Profile"));
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handlePast = (e) => {
+    e.preventDefault();
+    dispatch(
+      getPastAppointmentsByPhone({ phone: userdata.result.phoneNumber })
+    );
+    navigate("/showAppointments/pastappointments");
+  };
+
+  const handleUpcoming = (e) => {
+    e.preventDefault();
+    dispatch(
+      getUpcomingAppointmentsByPhone({ phone: userdata.result.phoneNumber })
+    );
+    navigate("/showAppointments/upcomingappointments");
   };
 
   const navigate = useNavigate();
@@ -68,75 +52,6 @@ const Navbar = (props) => {
     navigate("/Login");
   };
 
-  const handletitleChange = (e) => {
-    // dispatch(setUser(null))
-    // dispatch(getBook(userdata))
-
-    if (e.target.value !== "") {
-      let taskupdated = props.duptasks.filter((d) =>
-        d.taskTitle.includes(e.target.value)
-      );
-      // dispatch(setTaskNull())
-      // dispatch(setTask(taskupdated));
-    } else {
-      // dispatch(setTaskNull())
-      // dispatch(setTask(props.duptasks));
-    }
-  };
-
-  const handleCategoriesChange = (e) => {
-    // let userdata=JSON.parse(localStorage.getItem('Profile'))
-    // dispatch(getBook(userdata))
-    if (e.target.value !== "") {
-      let taskupdated = props.duptasks.filter((d) =>
-        d.taskstatus.includes(e.target.value)
-      );
-
-      // dispatch(setTask(taskupdated));
-    } else {
-      // dispatch(setTask(props.duptasks));
-    }
-  };
-
-  const handleDateChange = (e) => {
-    const inputDate = e.target.value;
-    // setSelectedDateTime(inputDate);
-
-    // Format the date into "MM/DD/YYYY, hh:mm:ss A"
-    if (inputDate) {
-      const formatted = format(new Date(inputDate), "M/d/yyyy, h:mm:ss a");
-      setFormData({ ...formData, duedate: formatted });
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-
-    // formData["username"] =
-    //   props?.userInfo !== null ? props.userInfo.user?.result?.username : "";
-    // formData["userid"] =
-    //   props?.userInfo !== null ? props?.userInfo?.user.result._id : "";
-
-    dispatch(
-      addBook(
-        formData.author,
-        formData.title,
-        formData.year,
-        formData.genre,
-        formData.description
-      )
-    );
-    handleClose();
-  };
-
-  const getId = () => {
-    let ids = props.tasks.map((d) => d.id);
-    return Math.max(...ids);
-  };
-  const [anchorEl, setAnchorEl] = useState(null);
-  const handleMenuClick = (e) => setAnchorEl(e.currentTarget);
-  const handleMenuClose = () => setAnchorEl(null);
   return (
     <AppBar
       position="static"
@@ -152,16 +67,16 @@ const Navbar = (props) => {
       }}
     >
       <Toolbar>
-        <IconButton
+        {/* <IconButton
           edge="start"
           color="inherit"
           aria-label="menu"
           sx={{ mr: 2 }}
         >
           <MenuIcon />
-        </IconButton>
+        </IconButton> */}
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          Book Store
+          Ayurvedic Treatment
         </Typography>
         {test ? (
           <>
@@ -211,9 +126,19 @@ const Navbar = (props) => {
         ) : (
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             {userdata !== null ? (
-              <Button size="small" onClick={handleOpen} variant="contained">
-                Add book
-              </Button>
+              <>
+                <Button size="small" onClick={handlePast} variant="contained">
+                  Past Appointments
+                </Button>
+
+                <Button
+                  size="small"
+                  onClick={handleUpcoming}
+                  variant="contained"
+                >
+                  Upcoming Appointments
+                </Button>
+              </>
             ) : (
               ""
             )}
@@ -226,84 +151,6 @@ const Navbar = (props) => {
             )}
           </Box>
         )}
-
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Add Book</DialogTitle>
-          <DialogContent>
-            <form onSubmit={handleSubmit}>
-              <label>Title</label>
-
-              <TextField
-                label="title"
-                name="title"
-                fullWidth
-                margin="normal"
-                value={formData.title}
-                onChange={handleChange}
-                required
-              />
-
-              <label>Author</label>
-
-              <TextField
-                name="author"
-                fullWidth
-                margin="normal"
-                value={formData.author}
-                onChange={handleChange}
-                required
-              />
-              <label>Genre</label>
-
-              <TextField
-                select
-                name="genre"
-                label="Genre"
-                fullWidth
-                margin="normal"
-                value={formData.genre}
-                onChange={handleChange}
-                required
-              >
-                {genres.map((genre) => (
-                  <MenuItem key={genre} value={genre}>
-                    {genre}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <label>Publish Year</label>
-
-              <TextField
-                name="year"
-                fullWidth
-                margin="normal"
-                value={formData.year}
-                onChange={handleChange}
-                required
-              />
-
-              <label>Description</label>
-
-              <TextField
-                name="description"
-                fullWidth
-                margin="normal"
-                value={formData.description}
-                onChange={handleChange}
-                required
-              />
-
-              <DialogActions>
-                <Button onClick={handleClose} color="secondary">
-                  Cancel
-                </Button>
-                <Button type="submit" color="primary" variant="contained">
-                  Save Changes
-                </Button>
-              </DialogActions>
-            </form>
-          </DialogContent>
-        </Dialog>
       </Toolbar>
     </AppBar>
   );

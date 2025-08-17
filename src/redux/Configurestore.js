@@ -1,13 +1,13 @@
 import {configureStore, combineReducers} from "@reduxjs/toolkit";
-import {  UsersReducer,messageReducer, BookReducer,commentsReducer} from "./Reducers";
+import {  UsersReducer,DoctorReducer,appointmentsReducer} from "./Reducers";
 //const ConfigureStore=()=>{
 
 
 const reducer = combineReducers({
-  BookReducer,
+  
     UsersReducer,
-    messageReducer,
-    commentsReducer
+    DoctorReducer,
+    appointmentsReducer,
 
    
   })

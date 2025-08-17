@@ -1,109 +1,139 @@
 import * as api from "./api"; // Always place imports at the top
+import axios from "axios";
 
-export const ADD_BOOK_SUCCESS = "ADD_BOOK_SUCCESS";
-export const DELETE_BOOK_SUCCESS = "DELETE_BOOK_SUCCESS";
 
-export const UPDATE_BOOK_SUCCESS = "UPDATE_BOOK_SUCCESS";
+export const BOOK_APPOINTMENT_SUCCESS = "BOOK_APPOINTMENT_SUCCESS";
+export const CONFIRM_APPOINTMENT_SUCCESS ="CONFIRM_APPOINTMENT_SUCCESS";
+
+export const CANCEL_APPOINTMENT_SUCCESS = "CANCEL_APPOINTMENT_SUCCESS";
+
+export const GET_APPOINTMENT_SUCCESS = "GET_APPOINTMENT_SUCCESS";
+
+export const GET_DOCTOR_SUCCESS =  "GET_DOCTOR_SUCCESS"
+export const RESCHEDULE_APPOINTMENT_SUCCESS = "RESCHEDULE_APPOINTMENT_SUCCESS";
+
 export const SET_USER_SUCCESS = "SET_USER_SUCCESS";
-
-
 export const GET_USER_SUCCESS = "GET_USER_SUCCESS";
-export const SET_MESSAGE_SUCCESS = "SET_MESSAGE_SUCCESS";
-
-export const GET_MESSAGE_SUCCESS = "GET_MESSAGE_SUCCESS";
-export const GET_COMMENT_SUCCESS = "GET_COMMENT_SUCCESS";
-export const ADD_COMMENT_SUCCESS = "ADD_COMMENT_SUCCESS";
-export const GET_BOOK_SUCCESS = "GET_BOOK_SUCCESS";
-
-export const addBook =
-  (
-   author,
-   title,
-   year,
-   genre,
-   description
-    ) =>
-  async (dispatch) => {
-    try {
-      let Bookdata = {
-        author,
-        title,
-        year,
-        genre,
-        description
-      };
-      console.log(Bookdata)
-      const { data } = await api.addnewbook(Bookdata);
-      // let userdata = JSON.parse(localStorage.getItem("Profile"));
-      dispatch(getBook());
-    } catch (err) {
-      console.log(err);
-    }
-  };
+// export const GETDATA = "GETDATA";
+// export const UPDATEDATA = "UPDATEDATA";
+// export const DELETEDATA = "DELETEDATA";
 
 
-export const getBook = (user) => async (dispatch) => {
+
+
+export const getdoctors = (user) => async (dispatch) => {
+  console.log(user)
   try {
     if (user !== null) {
-      const { data } = await api.getallbooks();
-    console.log(data)
+      const { data } = await api.getalldoctors();
      
-      dispatch({ type: "GET_BOOK_SUCCESS", payload: data });
+      dispatch({ type: "GET_DOCTOR_SUCCESS", payload: data.items });
     } else {
-      dispatch({ type: "GET_BOOK_SUCCESS", payload: [] });
+      dispatch({ type: "GET_DOCTOR_SUCCESS", payload: [] });
     }
   } catch (err) {
     console.log(err);
   }
 };
 
-export const addComment = (commentdata) => async (dispatch) => {
-  try {
-    console.log(commentdata)
- 
-      const { data } = await api.addComment(commentdata);
-     
-      // dispatch({ type: "ADD_COMMENT_SUCCESS", payload: data });
-  
-  } catch (err) {
-    console.log(err);
-  }
-};
 
-export const getComment = (bookid) => async (dispatch) => {
+
+export const getdoctorsbyId = async(bookid) => {
   try {
-      const { data } = await api.getComment(bookid);
-     
-      dispatch({ type: "GET_COMMENT_SUCCESS", payload: data });
+      const { data } = await api.getdoctorsbyId(bookid);
+      return data
     
   } catch (err) {
     console.log(err);
   }
 };
 
-export const updateBook = (task, id) => async (dispatch) => {
+export const fixappointment = async(d) => {
+  console.log(d)
   try {
-    const { data } = await api.updatebook(task, id);
+    const { data } = await api.fixappointment(d);    
+    console.log(data)
 
-    const dateObject = new Date(task.duedate);
+    return data
+    // dispatch({ type: "BOOK_APPOINTMENT_SUCCESS", payload: appointment });
+  } catch (err) {
+    console.log(err);
+    return err
+  }
+};
 
-    // Convert Date object to ISO format
-    const isoDate = dateObject.toISOString();
-    task.duedate = isoDate;
 
-    dispatch({ type: "UPDATE_BOOK_SUCCESS", payload: task });
+
+export const Confirmappointment = async(d) => {
+  try {
+    const { data } = await api.Confirmappointment(d);    
+    // dispatch({ type: "CONFIRM_APPOINTMENT_SUCCESS", payload: appointment });
+    return data
   } catch (err) {
     console.log(err);
   }
 };
 
-export const deleteBook = (id) => async (dispatch) => {
+
+export const rescheduleappointment = async(d)=> {
   try {
-    const { data } = await api.deletebook(id);
+    console.log(d)
+    const { data } = await api.rescheduleAppointment(d);    
+    console.log(data)
 
-    dispatch({ type: "DELETE_BOOK_SUCCESS", payload: id });
-    // dispatch({ type: "DELETE_DUPTASK_SUCCESS", payload: id });
+    return data
+    // dispatch({ type: "GET_APPOINTMENT_SUCCESS", payload: appointment });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
+export const getPastAppointmentsByPhone = (d)=> async (dispatch) => {
+  try {
+    console.log("asdggggggggggggggggggggggggggggggggggg")
+    const { data } = await api.getPastAppointmentsByPhone(d); 
+        dispatch({ type: "GET_APPOINTMENT_SUCCESS", payload: data.appointments});
+
+        console.log(data)
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getUpcomingAppointmentsByPhone = (d)=> async (dispatch) => {
+  try {
+    const { data } = await api.getUpcomingAppointmentsByPhone(d); 
+    console.log(data)
+        dispatch({ type: "GET_APPOINTMENT_SUCCESS", payload: data.appointments });
+        console.log(data)
+
+    // return data   
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+export const Cancel = async(d) => {
+  try {
+    console.log(d)
+    const { data } = await api.Cancel(d);   
+
+    // dispatch({ type: "UPDATE_APPOINTMENT_SUCCESS", payload: appointment });
+    return data
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const cancelandremove = async(d) => {
+  try {
+    console.log(d)
+    const { data } = await api.cancelandremove(d);   
+
+    // dispatch({ type: "UPDATE_APPOINTMENT_SUCCESS", payload: appointment });
+    return data
   } catch (err) {
     console.log(err);
   }
@@ -136,16 +166,16 @@ export const signup = (authData, navigate) => async (dispatch) => {
 
 export const login = (authData, navigate) => async (dispatch) => {
   try {
-    const { data } = await api.logIn(authData);
+    console.log(authData)
+    const { data } = await api.logIn(authData);   
     console.log(data)
-   
-    
     dispatch({ type: "AUTH", data });
     dispatch(setUser(JSON.parse(localStorage.getItem("Profile"))));
-    dispatch(getBook());
-
+    dispatch(getdoctors());
     navigate("/");
   } catch (err) {
     dispatch({type:'CHANGE',payload:err.response.data})
   }
 };
+
+

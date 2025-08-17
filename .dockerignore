@@ -1,0 +1,22 @@
+# Node modules & build cache
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build output (we rebuild inside Docker)
+build
+dist
+
+# Env files
+.env
+.env.*
+
+# OS / Editor files
+.DS_Store
+.vscode
+.idea
+*.swp
+
+# Git files
+.git
+.gitignore
