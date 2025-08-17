@@ -1,9 +1,9 @@
 import axios from "axios";
 const API = axios.create({
-    baseURL: "http://localhost:5000", 
+    baseURL: "https://ayurvedic-backend.onrender.com", 
     headers: { "Content-Type": "application/json" } 
 });
-export const logIn=(authData)=>API.post('http://localhost:5000/api/users/login',authData);
+export const logIn=(authData)=>API.post('https://ayurvedic-backend.onrender.com/api/users/login',authData);
 
 API.interceptors.request.use((req) => {
     if (localStorage.getItem('Profile')) {
