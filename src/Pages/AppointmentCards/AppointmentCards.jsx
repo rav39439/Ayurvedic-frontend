@@ -7,6 +7,7 @@ import { Typography, Box } from "@mui/material";
 // import './Task.css'
 const AppointmentCards = (props) => {
   const [loading, setloading] = useState(false);
+ 
   return (
     <>
       <div className="container mt-4">
@@ -29,13 +30,29 @@ const AppointmentCards = (props) => {
               mt: 3,
             }}
           >
-            {props.tasks.map((task, index) => (
-              <SingleAppointment
-                key={index}
-                task={task}
-                currentUser={props.currentUser}
-              />
-            ))}
+           {props.tasks.map((task, index) => (
+    <Box key={index} sx={{ position: "relative" }}>
+      <SingleAppointment task={task} currentUser={props.currentUser} />
+      
+      {task.slots.length === 0 && (
+        <Typography
+          variant="caption"
+          sx={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            bgcolor: "error.main",
+            color: "white",
+            px: 1,
+            borderRadius: 1,
+            fontSize: "0.7rem",
+          }}
+        >
+          Doctor Not Logged In / Available
+        </Typography>
+      )}
+    </Box>
+  ))}
           </Box>
         ) : (
           <Typography

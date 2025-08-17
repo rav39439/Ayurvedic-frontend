@@ -69,14 +69,14 @@ const SingleAppointment = (props) => {
         >
           <FaEye style={{ marginRight: "6px" }} /> View Appointments
         </Button>
-        <Button
+        {/* <Button
           size="small"
           variant="outlined"
           color="success"
           onClick={() => alert(`Booking appointment with ${props.task.name}`)}
         >
           Book Now
-        </Button>
+        </Button> */}
       </CardActions>
     </Card>
   );

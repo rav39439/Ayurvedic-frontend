@@ -26,7 +26,6 @@ function App(props) {
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("Profile");
-    console.log(props);
 
     navigate("/");
     dispatch(setUser(null));

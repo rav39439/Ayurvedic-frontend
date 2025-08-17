@@ -55,7 +55,6 @@ const AppointmentView = (props) => {
         : user.result.email,
     });
     setSelectedSlot(slot);
-    console.log(result.slots);
 
     if (result) {
       setlockedOtp(result.slot?.otpcode || "");
