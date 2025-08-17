@@ -36,7 +36,7 @@ function App(props) {
     if (localStorage.getItem("Profile") !== null) {
       dispatch(setUser(JSON.parse(localStorage.getItem("Profile"))));
     }
-    console.log(props);
+    
   }, [dispatch]);
 
   return (
